@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: "📦 Build & install"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        container:
+          - "fedora:latest"
+          - "quay.io/centos/centos:stream8"
+          - "quay.io/centos/centos:stream9"
+    container:
+      image: ${{ matrix.container }}
+
+    steps:
+    - name: Base setup
+      run: |
+        dnf --setopt install_weak_deps=False install -y \
+            dnf-plugins-core \
+            git-core \
+            rpm-build \
+            sudo
+
+        dnf remove -y subscription-manager-rhsm-certificates
+
+        git config --global user.email "actions@github.com"
+        git config --global user.name "Github Actions"
+
+    - name: Setup EPEL 8
+      if: ${{ endsWith(matrix.container, 'stream8') }}
+      run: |
+        dnf config-manager --set-enabled powertools
+        dnf install -y epel-release epel-next-release
+
+    - name: Setup EPEL 9
+      if: ${{ endsWith(matrix.container, 'stream9') }}
+      run: |
+        dnf config-manager --set-enabled crb
+        dnf install -y \
+            https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
+            https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
+
+    - name: Install tito (packages)
+      if: "${{ !endsWith(matrix.container, 'stream9') }}"
+      run: |
+        dnf --setopt install_weak_deps=False install -y \
+            tito
+
+    - name: Install tito (pip)
+      if: ${{ endsWith(matrix.container, 'stream9') }}
+      run: |
+        dnf --setopt install_weak_deps=False install -y \
+            python3-pip \
+            python3-setuptools
+        pip install https://github.com/rpm-software-management/tito/archive/refs/tags/tito-0.6.20-1.tar.gz
+
+    - uses: actions/checkout@v3
+
+    - name: Install RPM build dependencies
+      run: |
+        dnf --setopt install_weak_deps=False builddep -y \
+            --spec ./subscription-manager-rhsm-certificates.spec
+
+    - name: tito build --install
+      run: |
+        mkdir tito
+        tito build --offline --test --rpm --install --output=tito
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: |
+          tito/
