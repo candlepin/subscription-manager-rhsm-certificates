@@ -21,6 +21,7 @@ Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
 BuildRequires: make
+BuildRequires: openssl
 
 %description
 This package contains certificates required for communicating with the REST interface
@@ -37,6 +38,9 @@ and to receive access to content.
 %make_install \
     PREFIX=%{_prefix} \
     SYSCONFDIR=%{_sysconfdir}
+
+%check
+make check
 
 %files
 %license COPYING
