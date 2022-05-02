@@ -2,7 +2,10 @@ PREFIX ?= /usr/local
 SYSCONFDIR ?= $(PREFIX)/etc
 
 
-all:
+all: check
+
+check:
+	find etc-conf -name '*.pem' -print | xargs -t -I{} openssl x509 -in {} -noout -checkend 0
 
 install:
 	install -d $(DESTDIR)$(SYSCONFDIR)/rhsm/ca
