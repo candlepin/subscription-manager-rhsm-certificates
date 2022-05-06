@@ -7,7 +7,6 @@ URL: https://www.candlepinproject.org/
 Group: Development/Libraries/Python
 License: GPL-2.0
 %else
-Group: Development/Libraries
 License: GPLv2
 %endif
 
