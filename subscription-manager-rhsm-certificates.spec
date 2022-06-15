@@ -1,6 +1,6 @@
 Name: subscription-manager-rhsm-certificates
-Version: 20220608
-Release: 1%{?dist}
+Version: 20220425
+Release: 1
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
 URL: https://www.candlepinproject.org/
 %if 0%{?suse_version}
@@ -48,6 +48,9 @@ make check
 %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Jun 15 2022 Jiri Hnidek <jhnidek@redhat.com> 20220425-1
+- Use the same version and release as Fedora already use
+
 * Wed Jun 08 2022 Jiri Hnidek <jhnidek@redhat.com> 20220608-1
 - New package built with tito
 - Using new version pattern for subscription-manager-rhsm-certificates
