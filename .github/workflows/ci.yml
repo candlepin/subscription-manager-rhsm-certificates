@@ -15,6 +15,7 @@ jobs:
       matrix:
         container:
           - "fedora:latest"
+          - "fedora:rawhide"
           - "quay.io/centos/centos:stream8"
           - "quay.io/centos/centos:stream9"
     container:
