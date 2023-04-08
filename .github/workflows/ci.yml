@@ -42,9 +42,7 @@ jobs:
       if: ${{ endsWith(matrix.container, 'stream9') }}
       run: |
         dnf config-manager --set-enabled crb
-        dnf install -y \
-            https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
-            https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
+        dnf install -y epel-release epel-next-release
 
     - name: Install tito (packages)
       if: "${{ !endsWith(matrix.container, 'stream9') }}"
