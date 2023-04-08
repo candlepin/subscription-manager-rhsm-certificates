@@ -3,6 +3,9 @@ name: CI
 on:
   pull_request:
   workflow_dispatch:
+  schedule:
+    # at 8:00 every 1st of the month
+    - cron: 0 8 1 * *
 
 jobs:
   test:
