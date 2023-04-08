@@ -50,6 +50,12 @@ jobs:
 
     - uses: actions/checkout@v3
 
+    # This step is required so Tito can properly read git history
+    # See https://github.com/actions/checkout/issues/766
+    - name: Trust git repository path
+      run: |
+        git config --global --add safe.directory '*'
+
     - name: Install RPM build dependencies
       run: |
         dnf --setopt install_weak_deps=False builddep -y \
