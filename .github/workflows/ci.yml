@@ -44,19 +44,10 @@ jobs:
         dnf config-manager --set-enabled crb
         dnf install -y epel-release epel-next-release
 
-    - name: Install tito (packages)
-      if: "${{ !endsWith(matrix.container, 'stream9') }}"
+    - name: Install tito
       run: |
         dnf --setopt install_weak_deps=False install -y \
             tito
-
-    - name: Install tito (pip)
-      if: ${{ endsWith(matrix.container, 'stream9') }}
-      run: |
-        dnf --setopt install_weak_deps=False install -y \
-            python3-pip \
-            python3-setuptools
-        pip install https://github.com/rpm-software-management/tito/archive/refs/tags/tito-0.6.20-1.tar.gz
 
     - uses: actions/checkout@v3
 
