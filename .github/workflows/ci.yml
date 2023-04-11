@@ -2,8 +2,10 @@ name: CI
 
 on:
   pull_request:
-  push:
   workflow_dispatch:
+  schedule:
+    # at 8:00 every 1st of the month
+    - cron: 0 8 1 * *
 
 jobs:
   test:
@@ -13,6 +15,7 @@ jobs:
       matrix:
         container:
           - "fedora:latest"
+          - "fedora:rawhide"
           - "quay.io/centos/centos:stream8"
           - "quay.io/centos/centos:stream9"
     container:
@@ -42,25 +45,20 @@ jobs:
       if: ${{ endsWith(matrix.container, 'stream9') }}
       run: |
         dnf config-manager --set-enabled crb
-        dnf install -y \
-            https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
-            https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
+        dnf install -y epel-release epel-next-release
 
-    - name: Install tito (packages)
-      if: "${{ !endsWith(matrix.container, 'stream9') }}"
+    - name: Install tito
       run: |
         dnf --setopt install_weak_deps=False install -y \
             tito
 
-    - name: Install tito (pip)
-      if: ${{ endsWith(matrix.container, 'stream9') }}
-      run: |
-        dnf --setopt install_weak_deps=False install -y \
-            python3-pip \
-            python3-setuptools
-        pip install https://github.com/rpm-software-management/tito/archive/refs/tags/tito-0.6.20-1.tar.gz
-
     - uses: actions/checkout@v3
+
+    # This step is required so Tito can properly read git history
+    # See https://github.com/actions/checkout/issues/766
+    - name: Trust git repository path
+      run: |
+        git config --global --add safe.directory '*'
 
     - name: Install RPM build dependencies
       run: |
