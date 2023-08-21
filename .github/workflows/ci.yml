@@ -14,8 +14,8 @@ jobs:
     strategy:
       matrix:
         container:
-          - "fedora:latest"
-          - "fedora:rawhide"
+          - "registry.fedoraproject.org/fedora:latest"
+          - "registry.fedoraproject.org/fedora:rawhide"
           - "quay.io/centos/centos:stream8"
           - "quay.io/centos/centos:stream9"
     container:
