@@ -72,7 +72,7 @@ jobs:
         tito build --offline --test --rpm --install --output=tito
 
     - name: Archive artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: artifacts
         path: |
