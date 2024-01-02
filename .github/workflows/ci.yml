@@ -36,6 +36,14 @@ jobs:
         git config --global user.email "actions@github.com"
         git config --global user.name "Github Actions"
 
+    - name: Get container name & version
+      id: container-name
+      run: |
+        name=${{ matrix.container }}
+        name=${name##*/}
+        name=${name//:/-}
+        echo "name=${name}" >> $GITHUB_OUTPUT
+
     - name: Setup EPEL 8
       if: ${{ endsWith(matrix.container, 'stream8') }}
       run: |
@@ -74,6 +82,6 @@ jobs:
     - name: Archive artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: artifacts
+        name: RPMs for ${{ steps.container-name.outputs.name }}
         path: |
           tito/
