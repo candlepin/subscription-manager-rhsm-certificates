@@ -17,7 +17,6 @@ jobs:
         container:
           - "registry.fedoraproject.org/fedora:latest"
           - "registry.fedoraproject.org/fedora:rawhide"
-          - "quay.io/centos/centos:stream8"
           - "quay.io/centos/centos:stream9"
     container:
       image: ${{ matrix.container }}
@@ -43,12 +42,6 @@ jobs:
         name=${name##*/}
         name=${name//:/-}
         echo "name=${name}" >> $GITHUB_OUTPUT
-
-    - name: Setup EPEL 8
-      if: ${{ endsWith(matrix.container, 'stream8') }}
-      run: |
-        dnf config-manager --set-enabled powertools
-        dnf install -y epel-release epel-next-release
 
     - name: Setup EPEL 9
       if: ${{ endsWith(matrix.container, 'stream9') }}
