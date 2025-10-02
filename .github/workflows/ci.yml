@@ -56,10 +56,11 @@ jobs:
         dnf config-manager --set-enabled crb
         dnf install -y epel-release
 
-    - name: Install tito
+    - name: Install tito (using pip)
       run: |
         dnf --setopt install_weak_deps=False install -y \
-            tito
+          python3-pip python3-setuptools
+        pip install https://github.com/rpm-software-management/tito/archive/refs/tags/tito-0.6.27-1.tar.gz
 
     - uses: actions/checkout@v5
 
