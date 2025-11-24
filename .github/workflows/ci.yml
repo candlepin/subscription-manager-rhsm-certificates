@@ -62,7 +62,7 @@ jobs:
           python3-pip python3-setuptools
         pip install https://github.com/rpm-software-management/tito/archive/refs/tags/tito-0.6.27-1.tar.gz
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     # This step is required so Tito can properly read git history
     # See https://github.com/actions/checkout/issues/766
