@@ -81,7 +81,7 @@ jobs:
         tito build --offline --test --rpm --install --output=tito
 
     - name: Archive artifacts
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: RPMs for ${{ steps.container-name.outputs.name }}
         path: |
